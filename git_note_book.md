@@ -1,5 +1,5 @@
 # Git学习笔记
-[TOC]
+
 ## 创建ssh key
 ``` bash
 git config --global user.name "xxy"
