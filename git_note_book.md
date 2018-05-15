@@ -120,7 +120,12 @@ git checkout -- xx.file
 ## 显示尚未暂存的改动，而不是上次提交以来所做的所有改动。
 ``` bash
 git diff # 查看已经add的文件与工作区文件的不同
-git diff --cached # 查看暂存区与提交的区别
+git diff --cached # 查看暂存区与提交的区别，也可以用git diff --staged
+```
+
+## 跳过使用暂存区
+``` bash
+git commit -a "描述" #自动把所有已经跟踪的过的文件暂存起来并一并提交
 ```
 
 ## 比较远程库与本地的区别
@@ -128,6 +133,52 @@ git diff --cached # 查看暂存区与提交的区别
 git fetch origin
 git diff master origin/master
 ```
+## 移除文件
+``` bash
+# 手动rm文件，文件还没有add到暂存区，git status会显示文件被删除，然后commit之后，这个文件就不会在纳入管理库了
+rm file
+# 文件已经add到暂存区，此时想要删除文件，使用下面的句子
+git rm -f file # 注意这样文件也是被物理删除的
+# 想把文件从git仓库中删除（从暂存区域移除），但仍然希望保留在当前工作目录中。
+# 就是想保留文件在磁盘，但不想让git继续跟踪。
+# 当你忘记添加.gitignore文件，不小心把一个很大的日志文件添加到暂存区，就可以使用这个方法
+git rm --cached file # 不论文件是已经暂存还是已经提交，用这个方法都能删掉，且不会删掉物理文件
+```
+## 查看历史消息
+``` bash
+git log
+git log -p # 显示每次提交内容的差异
+git log -2 # 显示最近两次提交
+git log --stat # 显示每次提交的简短统计信息
+```
+## 查看远程仓库
+``` bash
+git remote  # 列出每一个指定的远程仓库服务器
+git remote -v  # 会显示远程仓库和URL
+```
+## 从远程仓库中抓取与拉取
+这个命令会访问远程仓库，从中拉取所有还没有的数据。执行完成以后，将会拥有那个远程仓库中所有分支的引用，可以随时合并或查看
+注意
+git fetch 命令会将数据拉取到本地，它并不会合并会修改当前的工作。必须手动将其并入你的工作区。
+git pull 命令会从最初克隆的服务器上抓取数据并走动尝试合并到当前所在的分支
+git clone 命令会自动设置本地master分支跟踪克隆的远程的master分支
+
+## 推送到远程仓库
+``` bash
+# 将master分支推送到origin服务器上时（克隆时会自动帮你设置好两个名字），使用下面这个命令
+git push origin master
+```
+当你和其他人在同一时间克隆，他们先推送到上游然后你再推送到上游，你的推送将毫无疑问地被拒绝。你必须先将他们的工作拉取下来并将其合并到你的工作后才能推送。
+
+
+## 添加远程仓库
+``` bash
+# git remote add <shortanme> <url>
+git remote add project_name git@github.com:atommutou/project_name.git
+# 之后如果你想拉取仓库中有但你没有的信息，可以使用git fetch # cd
+
+```
+
 
 ## 冲突文件格式
 ``` txt
