@@ -120,9 +120,7 @@ git checkout -- xx.file
 ## 显示尚未暂存的改动，而不是上次提交以来所做的所有改动。
 ``` bash
 git diff # 查看已经add的文件与工作区文件的不同
-
-# 查看已经暂存起来的变化
-git diff --cached
+git diff --cached # 查看暂存区与提交的区别
 ```
 
 ## 比较远程库与本地的区别
