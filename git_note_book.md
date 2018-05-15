@@ -160,8 +160,8 @@ git remote -v  # 会显示远程仓库和URL
 这个命令会访问远程仓库，从中拉取所有还没有的数据。执行完成以后，将会拥有那个远程仓库中所有分支的引用，可以随时合并或查看
 注意
 git fetch 命令会将数据拉取到本地，它并不会合并会修改当前的工作。必须手动将其并入你的工作区。
-git pull 命令会从最初克隆的服务器上抓取数据并走动尝试合并到当前所在的分支
-git clone 命令会自动设置本地master分支跟踪克隆的远程的master分支
+git pull 命令会从最初克隆的服务器上抓取数据并走动尝试合并到当前所在的分支。
+git clone 命令会自动设置本地master分支跟踪克隆的远程的master分支。
 
 ## 推送到远程仓库
 ``` bash
@@ -170,15 +170,18 @@ git push origin master
 ```
 当你和其他人在同一时间克隆，他们先推送到上游然后你再推送到上游，你的推送将毫无疑问地被拒绝。你必须先将他们的工作拉取下来并将其合并到你的工作后才能推送。
 
-
-## 添加远程仓库
+## 查看远程库
 ``` bash
-# git remote add <shortanme> <url>
-git remote add project_name git@github.com:atommutou/project_name.git
-# 之后如果你想拉取仓库中有但你没有的信息，可以使用git fetch # cd
-
+git remote show origin
 ```
 
+## 远程仓库的移除与重命名
+``` bash
+# 将gs重命名为newgs
+git remote rename gs newgs # 注意这将修改你的远程分支的名字
+# 将newgs删除
+git remote rm newgs
+```
 
 ## 冲突文件格式
 ``` txt
