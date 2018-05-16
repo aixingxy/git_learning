@@ -56,6 +56,8 @@ git push origin master
 - 把已跟踪的文件放到暂存区
 - 合并是把有冲突的文件标记为已解决的状态
 
+
+
 # 2. 分支操作
 ## 创建分支
 ``` bash
@@ -197,11 +199,11 @@ git remote rm newgs
 
 
 # 程序开发流程
-1.比如说master分支是生产环境的代码，每次开发前我会先pull一下最新的master的代码，然后checkout出来一个新的分支，比如说dev分支。
+1.比如说master分支是生产环境的代码，每次开发前我会先pull一下最新的master的代码，然后checkout出来一个新的分支，比如说dev分支`git checkout -b dev`
 
 2.然后我所有的新代码都会写在dev分支上，开发测试完成后，add,commit。
 
-3.然后checkout回master分支，git pull最新的master代码。
+3.然后checkout回master分支`git checkout master`，git pull最新的master代码。
 
 4.与自己的dev分支进行diff操作看看，都有什么地方不同（主要是看，除了自己修改的，还有什么）
 ``` bash
@@ -210,6 +212,6 @@ git diff [branchA] [branchB] > a.txt 覆盖
 git diff [branchA] [branchB] >> a.txt 追加
 
 ```
-5.然后进行合并，再push
+5.再`git merge dev`分支进行合并，在master分支下`git push origin master'
 
 6.新手经常出现的版本冲突通常是大家同时修改了同一模块的东西。
