@@ -1,2 +1,3 @@
 # !/usr/bin/python3
-print("edit in dev brach")
+# coding=utf-8
+print("do something in dev branch")
