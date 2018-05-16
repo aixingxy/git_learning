@@ -193,6 +193,16 @@ git remote rename gs newgs # 注意这将修改你的远程分支的名字
 # 将newgs删除
 git remote rm newgs
 ```
+## Git隐藏(stash)操作
+- 你正在写代码，突然出现一个紧急bug要修复，你既不能提交代码，也不能丢弃当前的代码，你可以使用`git stash`将当前工作隐藏起来，存放到堆栈上。
+- 通过`git stash list`命令查看已存在更改的列表。
+- 通过`git stash pop`命令从堆栈中删除更改并将其放置在当前的工作目录中。
+
+## 移动文件
+```bash
+git mv file dir/ # 将文件移动到dir文件下，之后再提交
+```
+
 
 ## 冲突文件格式
 ``` txt
