@@ -23,7 +23,7 @@ vim id_rsa.pub
 # 1. 创建git项目
 ## 克隆远程版本库
 ``` bash
-git clone git@github.com:atommutou/gitlearning.git
+git clone git@github.com:atommutou/gitlearning.git # 会自动创建master分支
 
 # 如果想在克隆远程仓库的时候，自定义本地仓库的名字，可以使用如下命令
 git clone git@github.com:atommutou/gitlearning.git my_repp
@@ -159,9 +159,12 @@ git remote -v  # 会显示远程仓库和URL
 ## 从远程仓库中抓取与拉取
 这个命令会访问远程仓库，从中拉取所有还没有的数据。执行完成以后，将会拥有那个远程仓库中所有分支的引用，可以随时合并或查看
 注意
-git fetch 命令会将数据拉取到本地，它并不会合并会修改当前的工作。必须手动将其并入你的工作区。
-git pull 命令会从最初克隆的服务器上抓取数据并走动尝试合并到当前所在的分支。
-git clone 命令会自动设置本地master分支跟踪克隆的远程的master分支。
+
+`git fetch` 命令会将数据拉取到本地，它并不会合并会修改当前的工作。必须手动将其并入你的工作区。
+
+`git pull` 命令会从最初克隆的服务器上抓取数据并走动尝试合并到当前所在的分支。
+
+`git clone` 命令会自动设置本地master分支跟踪克隆的远程的master分支。
 
 ## 推送到远程仓库
 ``` bash
@@ -191,3 +194,48 @@ git remote rm newgs
 //冲突，他人
 ====>
 ```
+
+
+# 程序开发流程
+1.比如说master分支是生产环境的代码，每次开发前我会先pull一下最新的master的代码，然后checkout出来一个新的分支，比如说dev分支。
+
+2.然后我所有的新代码都会写在dev分支上，开发测试完成后，add,commit。
+
+3.然后checkout回master分支，git pull最新的master代码。
+
+4.与自己的dev分支进行diff操作看看，都有什么地方不同（主要是看，除了自己修改的，还有什么）
+``` bash
+# linux的重定向命令
+git diff [branchA] [branchB] > a.txt 覆盖
+git diff [branchA] [branchB] >> a.txt 追加
+
+```
+5.然后进行合并，再push
+
+6.新手经常出现的版本冲突通常是大家同时修改了同一模块的东西。
+
+
+审核
+    宽度问题
+    都对 功能
+2 关键词批量
+    更新->批量打标
+    更新确认
+    查询结果保存到 session
+    关调试语句
+    分页
+3 意图选择
+    编辑 改名 为 意图选择
+4 条件查询
+    提示：默认为所有日期
+    加上意图选择
+    查询结果为空：表格不更新
+    删除标签 confirm 去掉
+    删除句子没刷新页面
+    最后一列宽度会变
+5 所有的分页：
+  跳转到指定页
+  首页/末页：无效按钮不显示
+6 用户打分脚本改进:
+    显示打标数
+    加选项，选择是否运行打分（太慢）
