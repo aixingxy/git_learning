@@ -17,7 +17,6 @@ vim id_rsa.pub
 # 找到SSH and GPG keys
 # 选择新建SSH key：new ssh key
 # 填写和粘贴公钥内ring（不含中文）
-
 ```
 
 # 1. 创建git项目
