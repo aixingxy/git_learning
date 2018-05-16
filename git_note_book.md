@@ -98,10 +98,10 @@ git branch -d dev
 在Git中，用HEAD表示当前版本，上一个版本就是HEAD^，上上个版本就是HEAD^^，上100个版本HEAD~100
 
 ``` bash
-# 使用--hard强制恢复到某次提交，并且git log中也不会显示上一次的提交
+# 使用--hard强制恢复到某次提交，并且git log中也不会显示上一次的提交
 git reset --hard HEAD^
 ```
-如果希望再次回到最新提交，可以通过git reflog查看每一条记录，来寻找commit_id,再使用
+如果希望再次回到最新提交，可以通过git reflog查看每一条记录，来寻找commit_id,再使用
 ``` bash
 git reset --hard commit_id
 ```
@@ -117,7 +117,7 @@ git checkout -- xx.file
 场景3：已经提交了不合适的修改到版本库时，想要撤销本次提交，参考版本回退一节，不过前提是没有推送到远程库
 
 ## 撤销commit
-场景：当你commit之后，发现自己忘记提交一些文件，又不想再创建一个commit，可以撤销上一次的提交，然后再add遗漏的文件到缓存区，再提交，确认提交之后，便可以将本地仓库的文件提交到远程仓库中，即`git push origin 仓库名`
+场景：当你commit之后，发现自己忘记提交一些文件，又不想再创建一个commit，可以撤销上一次的提交``git commit --amend "new description"`，然后再add遗漏的文件到缓存区，再提交，确认提交之后，便可以将本地仓库的文件提交到远程仓库中，即`git push origin 仓库名`
 
 ## 显示尚未暂存的改动，而不是上次提交以来所做的所有改动。
 ``` bash
@@ -146,13 +146,19 @@ git rm -f file # 注意这样文件也是被物理删除的
 # 当你忘记添加.gitignore文件，不小心把一个很大的日志文件添加到暂存区，就可以使用这个方法
 git rm --cached file # 不论文件是已经暂存还是已经提交，用这个方法都能删掉，且不会删掉物理文件
 ```
-## 查看历史消息
+## 查看日志
 ``` bash
 git log
 git log -p # 显示每次提交内容的差异
 git log -2 # 显示最近两次提交
 git log --stat # 显示每次提交的简短统计信息
 ```
+## 查看日志详细信息
+``` bash
+# 现根据git log查看提交ID，然后使用下面的句子，查看详细的提交信息
+git show commit_id
+```
+
 ## 查看远程仓库
 ``` bash
 git remote  # 列出每一个指定的远程仓库服务器
