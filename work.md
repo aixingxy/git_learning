@@ -421,9 +421,7 @@ with tf.gfile.FastGFile('model/CTNModel.pb', mode='wb') as f:
 with open('./model/rounded_graph.pb', 'rb') as f:
     graph_def = tf.GraphDef()
     graph_def.ParseFromString(f.read())
-    output = tf.import_graph_def(graph_def,
-                                 input_map={'inputs/X:0': newInput_X},
-                                 return_elements=['output/predict:0'])
+    output = tf.import_graph_def(graph_def, input_map={'inputs/X:0': newInput_X}, return_elements=['output/predict:0'])
 ```
 
 由于我们原本的网络输入值是一个placeholder，这里为了方便输入我们也先定义一个新的placeholder：
