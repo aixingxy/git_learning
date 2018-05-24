@@ -350,3 +350,86 @@ https://blog.csdn.net/yjl9122/article/details/78341689
 
 查看tensorflow ckpt文件中的变量名和对应值
 https://blog.csdn.net/u010698086/article/details/77916532
+
+## Tensorflow固话模型
+参考：https://www.jianshu.com/p/091415b114e2
+备用参考：https://blog.csdn.net/tengxing007/article/details/55671018
+TensorFlow的saver方法一般是单一保存参数和graph，如何将参数和graph同时保存
+
+一种是通过freeze_graph把tf.train.write_graph()生成pb文件，另一种四tf.train.saver()生成chkp文件固话之后重新生成一个pb文件。
+1. freeze_graph
+这种方法需要首先使用tf.train.write_graph()以及tf.train.Saver()生成pb文件和ckpt文件
+``` python
+with tf.Session() as sess:
+    saver = tf.train.Saver()
+    saver.save(sess, 'model.ckpt')
+    tf.train.write_graph(sess.graph_def, '', 'graph.pb')
+```
+然后使用TensorFlow源码中的freeze_graph工具进行固话操作：
+首先需要build freeze_graph工具（需要bazel）
+bazel build tensorflow/python/tools:freeze_graph
+然后使用这个工具进行固化（/path/to/表示文件路径）：
+
+bazel-bin/tensorflow/python/tools/freeze_graph
+    --input_graph=/path/to/graph.pb
+    --input_checkpoint=/path/to/model.ckpt
+    --output_node_names=output/predict
+    --output_graph=/path/to/frozen.pb
+
+freeze_graph代码的过程啊：基本过程是开启Session、恢复保存的图、载入该图要求的权重、（然后程序自动会根据指定的输出节点选择需要的关联节点）删除对预测无关的metadata、最后将处理好的模型序列化之后保存。
+
+2. convert_variables_to_constants
+其实在TensorFlow中传统的保存模型方式是保存常量以及graph的，而我们的权重主要是变量，如果我们把训练好的权重变成常量之后再保存成PB文件，这样确实可以保存权重，就是方法有点繁琐，需要一个一个调用eval方法获取值之后赋值，再构建一个graph，把W和b赋值给新的graph。
+
+牛逼的Google为了方便大家使用，编写了一个方法供我们快速的转换并保存。
+
+首先我们需要引入这个方法
+
+``` python
+from tensorflow.python.framework.graph_util import convert_variables_to_constants
+```
+在想要保存的地方加入如下代码，把变量转换成常量
+``` python
+output_graph_def = convert_variables_to_constants(sess, sess.graph_def, output_node_names=['output/predict'])
+```
+这里参数第一个是当前的session，第二个为graph，第三个是输出节点名（如我的输出层代码是这样的：）
+``` python
+with tf.name_scope('output'):
+    w_out = tf.Variable(w_alpha * tf.random_normal([1024, MAX_CAPTCHA * CHAR_SET_LEN]))
+    tf.summary.histogram('output/weight', w_out)
+    b_out = tf.Variable(b_alpha * tf.random_normal([MAX_CAPTCHA * CHAR_SET_LEN]))
+    tf.summary.histogram('output/biases', b_out)
+    out = tf.add(tf.matmul(dense2, w_out), b_out)
+    out = tf.nn.softmax(out)
+    predict = tf.argmax(tf.reshape(out, [-1, 11, 36]), 2, name='predict')
+```
+由于我们采用了name_scope所以我们在predict之前需要加上output/
+
+生成文件
+``` python
+with tf.gfile.FastGFile('model/CTNModel.pb', mode='wb') as f:
+    f.write(output_graph_def.SerializeToString())
+```
+
+第一个参数是文件路径，第二个是指文件操作的模式，这里指的是以二进制的方式写入文件。
+
+运行代码，系统会生成一个PB文件，接下来我们要测试下这个模型是否能够正常的读取、运行。
+
+测试模型
+在Python环境下，我们首先需要加载这个模型，代码如下：
+``` python
+with open('./model/rounded_graph.pb', 'rb') as f:
+    graph_def = tf.GraphDef()
+    graph_def.ParseFromString(f.read())
+    output = tf.import_graph_def(graph_def, input_map={'inputs/X:0': newInput_X}, return_elements=['output/predict:0'])
+```
+
+由于我们原本的网络输入值是一个placeholder，这里为了方便输入我们也先定义一个新的placeholder：
+
+newInput_X = tf.placeholder(tf.float32, [None, IMAGE_HEIGHT * IMAGE_WIDTH], name="X")
+在input_map的参数填入新的placeholder。
+
+在调用我们的网络的时候直接用这个新的placeholder接收数据，如：
+
+text_list = sesss.run(output, feed_dict={newInput_X: [captcha_image]})
+然后就是运行我们的网络，看是否可以运行吧。
