@@ -86,12 +86,22 @@ git merge dev # 用于合并指定分支到当前分支
 ``` bash
 git log --graph --pretty=oneline --abbrev-commit
 ```
-##
+## 切换远程分支
+``` bash
+git branch -a # 列出所有分支名称
+# remotes/origin/dev
+# remotes/origin/release
+git checkout -b dev origin/dev # checkout远程的dev分支，在本地起名为dev分支，并切换到本地的dev分支
+git checkout -b release origin/release
+git checkout dev
+```
 
 ## 删除分支
 ``` bash
 git branch -d dev
 ```
+
+
 
 # 3. 后悔操作
 ## 版本回退
