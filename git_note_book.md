@@ -15,7 +15,7 @@ vim id_rsa.pub
 # 打开Github网站进行登录
 # 到个人设置页Personal Settings
 # 找到SSH and GPG keys
-# 选择新建SSH key：new ssh key
+# 选择新建SSH key：new ssh key
 # 填写和粘贴公钥内ring（不含中文）
 ```
 
@@ -41,9 +41,9 @@ git commit -m "first commit"
 remote add origin git@github.com:atommutou/gitlearning.git
 git remote add origin git@github.com:atommutou/gitlearning.git
 git push -u origin master
-# 第一次推送master分支，加上-u参数，Git不但会把本地的master分支内容推送的远程新的master，还把本地master分支和远程的master分支关联起来。
-# 以后推送，使用下面的语句就可以了
-git push origin master
+# 第一次推送master分支，加上-u参数，Git不但会把本地的master分支内容推送的远程新的master，还把本地master分支和远程的master分支关联起来。
+# 以后推送，使用下面的语句就可以了
+git push origin master
 ```
 ## 更新提交到仓库
 工作目录下的每一个文件都不外乎两种状态：已跟踪和未跟踪。
@@ -61,7 +61,7 @@ git push origin master
 # 2. 分支操作
 ## 创建分支
 ``` bash
-git checkout -b dev # 创建分支并直接切换
+git checkout -b dev # 创建分支并直接切换
 # 相当于下面两个句子
 git branch dev # 创建分支
 git checkout dev # 切换分支
@@ -93,7 +93,7 @@ git branch -a # 列出所有分支名称
 # remotes/origin/release
 git checkout -b dev origin/dev # checkout远程的dev分支，在本地起名为dev分支，并切换到本地的dev分支
 git checkout -b release origin/release
-git checkout dev
+git checkout dev # 直接切换远程分支
 ```
 
 ## 删除分支
@@ -108,7 +108,7 @@ git branch -d dev
 在Git中，用HEAD表示当前版本，上一个版本就是HEAD^，上上个版本就是HEAD^^，上100个版本HEAD~100
 
 ``` bash
-# 使用--hard强制恢复到某次提交，并且git log中也不会显示上一次的提交
+# 使用--hard强制恢复到某次提交，并且git log中也不会显示上一次的提交
 git reset --hard HEAD^
 ```
 如果希望再次回到最新提交，可以通过git reflog查看每一条记录，来寻找commit_id,再使用
