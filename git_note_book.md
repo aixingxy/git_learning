@@ -38,7 +38,6 @@ echo "# gitlearning" >> README.md
 git init
 git add README.md
 git commit -m "first commit"
-remote add origin git@github.com:atommutou/gitlearning.git
 git remote add origin git@github.com:atommutou/gitlearning.git
 git push -u origin master
 # 第一次推送master分支，加上-u参数，Git不但会把本地的master分支内容推送的远程新的master，还把本地master分支和远程的master分支关联起来。
