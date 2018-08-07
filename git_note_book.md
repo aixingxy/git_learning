@@ -23,7 +23,7 @@ vim id_rsa.pub
 # 1. 创建git项目
 ## 克隆远程版本库
 ```bash
-git clone git@github.com:atommutou/gitlearning.git # 会自动创建master分支
+git clone git@github.com:aixingxy/gitlearning.git # 会自动创建master分支
 
 # 如果想在克隆远程仓库的时候，自定义本地仓库的名字，可以使用如下命令
 git clone git@github.com:atommutou/gitlearning.git my_repp
@@ -40,7 +40,7 @@ git add README.md
 git commit -m "first commit"
 git remote add origin git@github.com:atommutou/gitlearning.git
 git push -u origin master
-# 第一次推送master分支，加上-u参数，Git不但会把本地的master分支内容推送的远程新的master，还把本地master分支和远程的master分支关联起来。
+# 第一次推送master分支，加上-u参数，Git不但会把本地的master分支内容推送的远程新的master，还把本地master分支和远程的master分支关联起来。
 # 以后推送，使用下面的语句就可以了
 git push origin master
 ```
