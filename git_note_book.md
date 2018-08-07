@@ -23,7 +23,7 @@ vim id_rsa.pub
 # 1. 创建git项目
 ## 克隆远程版本库
 ```bash
-git clone git@github.com:aixingxy/gitlearning.git # 会自动创建master分支
+git clone git@github.com:aixingxy/gitlearning.git  # 会自动创建master分支
 
 # 如果想在克隆远程仓库的时候，自定义本地仓库的名字，可以使用如下命令
 git clone git@github.com:atommutou/gitlearning.git my_repp
@@ -51,6 +51,10 @@ git push origin master
 初次clone某个仓库的时候，工作目录中的所有文件都属于已跟踪文件，并处于未修改状态。
 
 ### git add的功能
+```bash
+git add file  # 添加制定文件
+git add .  # 添加工程下的所有文件
+```
 - 可以用来开始跟踪新文件
 - 把已跟踪的文件放到暂存区
 - 合并是把有冲突的文件标记为已解决的状态
@@ -60,15 +64,15 @@ git push origin master
 # 2. 分支操作
 ## 创建分支
 ```bash
-git checkout -b dev # 创建分支并直接切换
+git checkout -b dev  # 创建分支并直接切换
 # 相当于下面两个句子
-git branch dev # 创建分支
-git checkout dev # 切换分支
+git branch dev  # 创建分支
+git checkout dev  # 切换分支
 ```
 
 ## 查看分支
 ```bash
-git branch # 当前分支钱前面会有一个*号
+git branch  # 当前分支钱前面会有一个*号
 ```
 
 ## 切换分支
@@ -78,7 +82,7 @@ git checkout dev
 
 ## 合并分支
 ```bash
-git merge dev # 用于合并指定分支到当前分支
+git merge dev  # 用于合并指定分支到当前分支
 # 使用Fast-forward
 ```
 ## 查看分支合并情况
@@ -90,9 +94,9 @@ git log --graph --pretty=oneline --abbrev-commit
 git branch -a # 列出所有分支名称
 # remotes/origin/dev
 # remotes/origin/release
-git checkout -b dev origin/dev # checkout远程的dev分支，在本地起名为dev分支，并切换到本地的dev分支
+git checkout -b dev origin/dev  # checkout远程的dev分支，在本地起名为dev分支，并切换到本地的dev分支
 git checkout -b release origin/release
-git checkout dev # 直接切换远程分支
+git checkout dev  # 直接切换远程分支
 ```
 
 ## 删除分支
@@ -118,7 +122,7 @@ git checkout -- xx.file  #放弃单个文件
 git checkout .  #放弃整个工程 
 ```
 
-场景1：当你改乱了工作区某个文件的内容，想直接丢弃工作区的修改时，用命令```git checkout -- file```。
+场景1：当你改乱了工作区某个文件的内容，想直接丢弃工作区的修改时，用命令```git checkout -- file```
 
 场景2：当你不但改乱了工作区某个文件的内容，还添加到了暂存区时，想丢弃修改，分两步，第一步用命令```git reset HEAD file```，就回到了场景1，第二步按场景1操作。
 
