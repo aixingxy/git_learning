@@ -251,6 +251,8 @@ D  a.py
 ➜  gitlearning git:(master) ✗ ls
 git_note_book.md img
 
+
+
 # 手动rm文件，文件还没有add到暂存区，git status会显示文件被删除，然后commit之后，这个文件就不会在纳入管理库了
 rm file
 # 文件已经add到暂存区，此时想要删除文件，使用下面的句子
