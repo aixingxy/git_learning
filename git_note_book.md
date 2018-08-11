@@ -115,7 +115,7 @@ git checkout dev  # 切换分支
 ## 查看分支
 ```bash
 git branch  # 当前分支钱前面会有一个*号，当你执行gi他init时，缺省情况下会自动创建master分支
-git branck -a  # 插卡所有分支
+git branck -a  # 查看所有分支
 ```
 
 ## 切换分支
