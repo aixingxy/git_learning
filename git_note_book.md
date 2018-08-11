@@ -37,21 +37,24 @@
 git config --global user.name "xxy"
 git config --global user.email 775415344@qq.com
 
+# 本地Git仓库与Github仓库之间的传输是通过SSH加密的，需要配置验证信息
+# 生成SSH Key
 ssh-keygen -t rsa -C "775415344@qq.com"
 # 三次回车
 
 # 查看秘钥
 cd ~/.ssh
-vim id_rsa.pub
+cat id_rsa.pub
 # 复制秘钥
 # 打开Github网站进行登录
 # 到个人设置页Personal Settings
 # 找到SSH and GPG keys
 # 选择新建SSH key：new ssh key
-# 填写和粘贴公钥内ring（不含中文）
+# 填写和粘贴公钥内（不含中文）
 ```
 
 # 1. 创建git项目
+
 ## 克隆远程版本库
 ```bash
 git clone git@github.com:aixingxy/gitlearning.git  # 会自动创建master分支
@@ -59,9 +62,7 @@ git clone git@github.com:aixingxy/gitlearning.git  # 会自动创建master分支
 # 如果想在克隆远程仓库的时候，自定义本地仓库的名字，可以使用如下命令
 git clone git@github.com:atommutou/gitlearning.git my_repp
 ```
-
-## 创建本地版本库
-## 添加远程库
+## 新建项目提交到远程库
 ```bash
 mkdir gitlearning
 cd gitlearning
@@ -96,14 +97,58 @@ git add .  # 添加工程下的所有文件
 git status  # 
 git status -s  # 加上-s参数，以获得简短的输出结果 
 ```
-qgit ### git diff查看git status结果的详细信息
+
+### git diff查看git status结果的详细信息
 ```bash
 git diff  # 查看尚未缓存的改动
 git diff --cached  # 查看已缓存的改动
 git diff HEAD  # 查看已缓存与未缓存的所有改动
 ```
+# 2.远程仓库
 
-# 2. 分支操作
+## 添加远程库
+```
+git remote add [shortname] [url]
+```
+
+## 查看当前配置的远程库
+```
+git remote
+git remote -v  # 执行时加上 -v 参数，可以看到每个别名的实际链接地址。
+
+➜  gitlearning git:(master) ✗ git remote
+origin
+➜  gitlearning git:(master) ✗ git remote -v
+origin	git@github.com:atommutou/gitlearning.git (fetch)
+origin	git@github.com:atommutou/gitlearning.git (push)
+```
+
+## 提取远程仓库
+Git 有两个命令来提取远程仓库的更新
+
+1. 从远程仓库下载新分支与数据
+```
+git fetch 远程库
+
+# 在Github上手动修改一个文件
+git fetch origin  # 获取没有的数据
+git merge origin/master  # 将Github上的任何更新合并到你的当前分支
+
+```
+该命令执行完后需要执行`git merge 远程分支`到你所在的分支
+
+2. 从远端仓库提取数据并尝试合并到当前分支
+```
+git pull
+```
+该命令技术执行`git fetch`之后紧接着执行`git merge 远程分支`到你所在的任意分支。
+
+## 推送到远程仓库
+
+## 删除远程仓库
+
+
+# 3. 分支操作
 ## 创建分支
 ```bash
 git checkout -b dev  # 创建分支并直接切换
@@ -127,11 +172,68 @@ git checkout dev
 ```bash
 git merge dev  # 用于合并指定分支到当前分支
 # 使用Fast-forward
+
+# 例子
+➜  gitlearning git:(master) ✗ touch Readme.md
+➜  gitlearning git:(master) ✗ echo "# README" > Readme.md
+➜  gitlearning git:(master) ✗ cat Readme.md
+# README
+➜  gitlearning git:(master) ✗ git add .
+➜  gitlearning git:(master) ✗ git commit -m "update"
+[master ee32b3d] update
+ 2 files changed, 3 insertions(+), 1 deletion(-)
+ create mode 100644 Readme.md
+➜  gitlearning git:(master) git branch dev
+➜  gitlearning git:(master) git checkout dev
+Switched to branch 'dev'
+➜  gitlearning git:(dev) ls
+Readme.md        git_note_book.md img
+➜  gitlearning git:(dev) echo "# add line by dev" >> Readme.md
+➜  gitlearning git:(dev) ✗ cat Readme.md
+# README
+# add line by dev
+➜  gitlearning git:(dev) ✗ git add .
+➜  gitlearning git:(dev) ✗ git commit -m "update by dev"
+[dev 47d8a11] update by dev
+ 1 file changed, 1 insertion(+)
+➜  gitlearning git:(dev) git status -s
+➜  gitlearning git:(dev) git checkout master
+Switched to branch 'master'
+Your branch is ahead of 'origin/master' by 2 commits.
+  (use "git push" to publish your local commits)
+➜  gitlearning git:(master) echo "# add by master" >> Readme.md
+➜  gitlearning git:(master) ✗ cat Readme.md
+# README
+# add by master
+➜  gitlearning git:(master) ✗ git add .
+➜  gitlearning git:(master) ✗ git commit -m "update by master"
+[master 185a544] update by master
+ 1 file changed, 1 insertion(+)
+➜  gitlearning git:(master) git merge dev
+Auto-merging Readme.md
+CONFLICT (content): Merge conflict in Readme.md
+Automatic merge failed; fix conflicts and then commit the result.
+➜  gitlearning git:(master) ✗ cat Readme.md
+# README
+<<<<<<< HEAD
+# add by master
+=======
+# add line by dev
+>>>>>>> dev
+➜  gitlearning git:(master) ✗ vim Readme.md
+➜  gitlearning git:(master) ✗ git add .
+➜  gitlearning git:(master) git commit -m "merge dev"
+[master 06c20e3] merge dev
+➜  gitlearning git:(master) git branch -d dev
+Deleted branch dev (was 47d8a11).
+➜  gitlearning git:(master) git branch
 ```
+
 ## 查看分支合并情况
 ```bash
 git log --graph --pretty=oneline --abbrev-commit
 ```
+
 ## 切换远程分支
 ```bash
 git branch -a # 列出所有分支名称
@@ -147,8 +249,30 @@ git checkout dev  # 直接切换远程分支
 git branch -d dev  # 将分支合并后使用-d参数进行删除
 git branch -D dev  # 若分支还未合并则使用-D参数进行删除
 ```
+# 4. 查看历史
+## git log
+```
+git log  # 列出历史提交记录
+git log --oneline  # --oneline选项，查看历史记录的简洁的版本
+git log --onelien --graph  # --graph 选项，查看历史中什么时候出现了分支、合并
+git log --reverse --oneline  # --reverse参数来逆向显示所有日志
+git log --author=Linus --oneline -5  # 查找指定用户的提交日志
+git log --decorate  # 我们可以查看标签信息
+```
 
-# 3. 后悔操作
+## git 标签
+```
+git tag -a v1.0  # -a 选项意为"创建一个带注解的标签"。 不用 -a 选项也可以执行的，但它不会记录这标签是啥时候打的，谁打的，也不会让你添加个标签的注解。 我推荐一直创建带注解的标签。
+# 查看标签信息
+git log --oneline --decorate --graph  
+
+# 如果我们忘了给某个提交打标签，又将它发布了，我们可以给它追加标签
+git tag -a v0.9 85fc7e7
+
+git tag  # 查看标签
+```
+
+# 5. 后悔操作
 ## 版本回退
 在Git中，用HEAD表示当前版本，上一个版本就是HEAD^，上上个版本就是HEAD^^，上100个版本HEAD~100
 
@@ -175,7 +299,7 @@ git checkout .  #会用暂存区全部文件替换工作区的文件
 ## 撤销commit
 场景：当你commit之后，发现自己忘记提交一些文件，又不想再创建一个commit，可以撤销上一次的提交``git commit --amend "new description"`，然后再add遗漏的文件到缓存区，再提交，确认提交之后，便可以将本地仓库的文件提交到远程仓库中，即`git push origin 仓库名`
 
-# 4.其他命令
+# 6.其他命令
 
 ## 跳过使用暂存区
 ```bash
