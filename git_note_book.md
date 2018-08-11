@@ -96,7 +96,7 @@ git add .  # 添加工程下的所有文件
 git status  # 
 git status -s  # 加上-s参数，以获得简短的输出结果 
 ```
-### git diff查看git status结果的详细信息
+qgit ### git diff查看git status结果的详细信息
 ```bash
 git diff  # 查看尚未缓存的改动
 git diff --cached  # 查看已缓存的改动
@@ -114,7 +114,7 @@ git checkout dev  # 切换分支
 
 ## 查看分支
 ```bash
-git branch  # 当前分支钱前面会有一个*号
+git branch  # 当前分支钱前面会有一个*号，当你执行gi他init时，缺省情况下会自动创建master分支
 git branck -a  # 插卡所有分支
 ```
 
@@ -221,46 +221,43 @@ M  git_note_book.md
 # 对于已经commit的文件
 git rm <file>  # 会将文件从缓存区和你的硬盘中（工作目录）删除
 
-➜  gitlearning git:(master) ✗ touch a.py
 ➜  gitlearning git:(master) ✗ git add .
-➜  gitlearning git:(master) ✗ git commit -m 'update'
-[master df3dd7a] update
- 2 files changed, 42 insertions(+), 11 deletions(-)
- create mode 100644 a.py
-➜  gitlearning git:(master) ✗ git rm a.py
-rm 'a.py'
 ➜  gitlearning git:(master) ✗ git status
 On branch master
-Your branch is ahead of 'origin/master' by 1 commit.
-  (use "git push" to publish your local commits)
+Your branch is up to date with 'origin/master'.
 
 Changes to be committed:
   (use "git reset HEAD <file>..." to unstage)
 
-	deleted:    a.py
+	new file:   a.py
 
-Changes not staged for commit:
-  (use "git add <file>..." to update what will be committed)
-  (use "git checkout -- <file>..." to discard changes in working directory)
+➜  gitlearning git:(master) ✗ git commit -m "update"
+[master c2ae4fc] update
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 a.py
+➜  gitlearning git:(master) git push origin master
+Counting objects: 3, done.
+Delta compression using up to 8 threads.
+Compressing objects: 100% (2/2), done.
+Writing objects: 100% (3/3), 303 bytes | 303.00 KiB/s, done.
+Total 3 (delta 0), reused 1 (delta 0)
+remote: This repository moved. Please use the new location:
+remote:   git@github.com:aixingxy/git_learning.git
+To github.com:atommutou/gitlearning.git
+   86eb681..c2ae4fc  master -> master
+➜  gitlearning git:(master) git status
+On branch master
+Your branch is up to date with 'origin/master'.
 
-	modified:   git_note_book.md
-
-➜  gitlearning git:(master) ✗ git status -s
-D  a.py
- M git_note_book.md
+nothing to commit, working tree clean
+➜  gitlearning git:(master) git rm a.py
+rm 'a.py'
 ➜  gitlearning git:(master) ✗ ls
 git_note_book.md img
-
-
-
-# 手动rm文件，文件还没有add到暂存区，git status会显示文件被删除，然后commit之后，这个文件就不会在纳入管理库了
-rm file
-# 文件已经add到暂存区，此时想要删除文件，使用下面的句子
-git rm -f file # 注意这样文件也是被物理删除的
-# 想把文件从git仓库中删除（从暂存区域移除），但仍然希望保留在当前工作目录中。
-# 就是想保留文件在磁盘，但不想让git继续跟踪。
-# 当你忘记添加.gitignore文件，不小心把一个很大的日志文件添加到暂存区，就可以使用这个方法
-git rm --cached file # 不论文件是已经暂存还是已经提交，用这个方法都能删掉，且不会删掉物理文件
+➜  gitlearning git:(master) ✗ git status -s
+D  a.py
+# 而 git rm --cached <file>  # 将文件从版本库和暂存区中删除，但是保留在工作目录中
+# 总结：git rm --cached file # 不论文件是已经暂存还是已经提交，用这个方法都能删掉，且不会删掉物理文件
 ```
 ## 查看日志
 ```bash
