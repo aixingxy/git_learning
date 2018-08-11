@@ -188,6 +188,7 @@ git diff master origin/master
 ```
 ## 删除文件
 ```bash
+# 对于已经add到暂存区的文件，可以使用下面的方法进行删除
 git rm -f <file> # 将文件从缓存区和硬盘中（工作目录）中删除，如果要在工作目录中保留改文件，可以使用
 git rm --cached <file>  # 将文件从缓存区中删除，但是保留在工作目录中
 
@@ -217,7 +218,38 @@ git_note_book.md img
 ➜  gitlearning git:(master) ✗ git status -s
 M  git_note_book.md
 
+# 对于已经commit的文件
+git rm <file>  # 会将文件从缓存区和你的硬盘中（工作目录）删除
 
+➜  gitlearning git:(master) ✗ touch a.py
+➜  gitlearning git:(master) ✗ git add .
+➜  gitlearning git:(master) ✗ git commit -m 'update'
+[master df3dd7a] update
+ 2 files changed, 42 insertions(+), 11 deletions(-)
+ create mode 100644 a.py
+➜  gitlearning git:(master) ✗ git rm a.py
+rm 'a.py'
+➜  gitlearning git:(master) ✗ git status
+On branch master
+Your branch is ahead of 'origin/master' by 1 commit.
+  (use "git push" to publish your local commits)
+
+Changes to be committed:
+  (use "git reset HEAD <file>..." to unstage)
+
+	deleted:    a.py
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
+
+	modified:   git_note_book.md
+
+➜  gitlearning git:(master) ✗ git status -s
+D  a.py
+ M git_note_book.md
+➜  gitlearning git:(master) ✗ ls
+git_note_book.md img
 
 # 手动rm文件，文件还没有add到暂存区，git status会显示文件被删除，然后commit之后，这个文件就不会在纳入管理库了
 rm file
