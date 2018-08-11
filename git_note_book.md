@@ -130,10 +130,26 @@ Git 有两个命令来提取远程仓库的更新
 ```
 git fetch 远程库
 
-# 在Github上手动修改一个文件
-git fetch origin  # 获取没有的数据
-git merge origin/master  # 将Github上的任何更新合并到你的当前分支
+# 1. 在Github上手动修改一个文件
 
+# 2. 获取没有的数据
+➜  gitlearning git:(master) git fetch origin
+remote: Counting objects: 3, done.
+remote: Compressing objects: 100% (2/2), done.
+remote: Total 3 (delta 0), reused 0 (delta 0), pack-reused 0
+Unpacking objects: 100% (3/3), done.
+From github.com:atommutou/gitlearning
+   b5c8d2f..242cdeb  master     -> origin/master
+
+# 3. 将Github上的任何更新合并到你的当前分支
+➜  gitlearning git:(master) git merge origin/master
+Updating 8081b74..242cdeb
+Fast-forward
+ Readme.md | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+➜  gitlearning git:(master) cat Readme.md
+# README
+# online change
 ```
 该命令执行完后需要执行`git merge 远程分支`到你所在的分支
 
@@ -144,9 +160,29 @@ git pull
 该命令技术执行`git fetch`之后紧接着执行`git merge 远程分支`到你所在的任意分支。
 
 ## 推送到远程仓库
-
+```
+git push [alias] [branch]  # 将本地的[branch]分支推送到[alias]远程仓库上的[branch]分支
+```
 ## 删除远程仓库
+```
+git remote rm [alias]
 
+➜  gitlearning git:(master) git remote
+origin
+➜  gitlearning git:(master) ✗ git remote -v
+origin	git@github.com:atommutou/gitlearning.git (fetch)
+origin	git@github.com:atommutou/gitlearning.git (push)
+➜  gitlearning git:(master) ✗ git remote add origin2 git@github.com:atommutou/gitlearning.git
+➜  gitlearning git:(master) ✗ git remote -v
+origin	git@github.com:atommutou/gitlearning.git (fetch)
+origin	git@github.com:atommutou/gitlearning.git (push)
+origin2	git@github.com:atommutou/gitlearning.git (fetch)
+origin2	git@github.com:atommutou/gitlearning.git (push)
+➜  gitlearning git:(master) ✗ git remote rm origin2
+➜  gitlearning git:(master) ✗ git remote -v
+origin	git@github.com:atommutou/gitlearning.git (fetch)
+origin	git@github.com:atommutou/gitlearning.git (push)
+```
 
 # 3. 分支操作
 ## 创建分支
@@ -464,8 +500,70 @@ git mv file dir/ # 将文件移动到dir文件下，之后再提交
 # linux的重定向命令
 git diff [branchA] [branchB] > a.txt  # > 表示覆盖
 git diff [branchA] [branchB] >> a.txt  # >> 表示追加
-
 ```
 5.再`git merge dev`分支进行合并，在master分支下`git push origin master`
 
 6.新手经常出现的版本冲突通常是大家同时修改了同一模块的东西。
+
+# Git服务器搭建
+参考： https://www.w3cschool.cn/git/git-server.html
+上一章节中我们远程仓库使用了 Github，Github 公开的项目是免费的，但是如果你不想让其他人看到你的项目就需要收费。
+
+这时我们就需要自己搭建一台Git服务器作为私有仓库使用。
+
+接下来我们将以 Centos 为例搭建 Git 服务器。
+
+### 1、安装Git
+
+`$ yum install curl-devel expat-devel gettext-devel openssl-devel zlib-devel perl-devel`
+`$ yum install git` 
+
+接下来我们 创建一个git用户组和用户，用来运行git服务：
+
+`$ groupadd git`
+`$ adduser git -g git` 
+
+### 2、创建证书登录
+
+收集所有需要登录的用户的公钥，公钥位于id_rsa.pub文件中，把我们的公钥导入到/home/git/.ssh/authorized_keys文件里，一行一个。
+
+如果没有该文件创建它：
+
+`$ cd /home/git/`
+`$ mkdir .ssh`
+`$ chmod 700 .ssh`
+`$ touch .ssh/authorized_keys`
+`$ chmod 600 .ssh/authorized_keys` 
+
+### 3、初始化Git仓库
+
+首先我们选定一个目录作为Git仓库，假定是/home/gitrepo/w3cschoolcn.git，在/home/gitrepo目录下输入命令：
+
+`$ cd /home`
+`$ mkdir gitrepo`
+`$ chown git:git gitrepo/`
+`$ cd gitrepo`
+
+`$ git init --bare w3cschoolcn.git`
+`Initialized empty Git repository in /home/gitrepo/w3cschoolcn.git/` 
+
+以上命令Git创建一个空仓库，服务器上的Git仓库通常都以.git结尾。然后，把仓库所属用户改为git：
+
+`$ chown -R git:git w3cschoolcn.git` 
+
+### 4、克隆仓库
+
+`$ git clone git@192.168.45.4:/home/gitrepo/w3cschoolcn.git`
+`Cloning into 'w3cschoolcn'...`
+`warning: You appear to have cloned an empty repository.`
+`Checking connectivity... done.` 
+
+192.168.45.4 为 Git 所在服务器 ip ，你需要将其修改为你自己的 Git 服务 ip。
+
+这样我们的 Git 服务器安装就完成了，接下来我们可以禁用 git 用户通过shell登录，可以通过编辑/etc/passwd文件完成。找到类似下面的一行：
+
+`git:x:503:503::/home/git:/bin/bash` 
+
+改为：
+
+`git:x:503:503::/home/git:/sbin/nologin`
