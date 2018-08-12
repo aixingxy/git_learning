@@ -282,8 +282,9 @@ git checkout dev  # 直接切换远程分支
 
 ## 删除分支
 ```bash
-git branch -d dev  # 将分支合并后使用-d参数进行删除
+git branch -d dev  # 将分支合并后使用-d参数进行删除，删除本地分支
 git branch -D dev  # 若分支还未合并则使用-D参数进行删除
+git push origin --delete dev  # 删除远程分支
 ```
 # 4. 查看历史
 ## git log
