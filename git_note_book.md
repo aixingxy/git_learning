@@ -108,7 +108,7 @@ git diff HEAD  # 查看已缓存与未缓存的所有改动
 
 ## 添加远程库
 ```
-git remote add [shortname] [url]
+git remote add [alias] [url]
 ```
 
 ## 查看当前配置的远程库
